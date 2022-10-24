@@ -1,55 +1,39 @@
 <?php
+
 namespace App\Models;
 
-use Illuminate\Support\Facades\File;
-use Spatie\YamlFrontMatter\YamlFrontMatter;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-Class Post
+class Post extends Model
 {
+    use HasFactory; //Post::factory()
 
-    public $title;
-    public $slug;
-    public $excerpt;
-    public $date;
-    public $body;
+    protected $fillable = ['title','excerpt','body'];
 
-    public function __construct($title, $slug, $excerpt, $date, $body)
+    protected $with = ['category','author'];
+
+    //Another way of defining the key with which laravel searches the item in the database
+    /*public function getRouteKeyName()
     {
-        $this->title = $title;
-        $this->slug = $slug;
-        $this->excerpt = $excerpt;
-        $this->date = $date;
-        $this->body = $body;
+        return 'slug';
+    }
+    */
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
-    public static function find($slug)
+    /*
+    public function user()
     {
-        return static::all()->firstWhere('slug', $slug);
+        return $this->belongsTo(User::class);
     }
+    */
 
-    public static function findOrFail($slug)
+    public function author()
     {
-        $post = static::find($slug);
-        if($post == null){
-            throw new ModelNotFoundException();
-        }
-        return $post;
+        return $this->belongsTo(User::class, 'user_id');
     }
-
-    public static function all()
-    {
-        return cache()->rememberForever('posts.all', function(){
-            return collect(File::files(resource_path("posts")))
-            ->map(fn($file) => YamlFrontMatter::parseFile($file))
-            ->map(fn($document) => New Post(
-                $document->title,
-                $document->slug,
-                $document->excerpt,
-                $document->date,
-                $document->body(),
-            ))->sortBy('date')->reverse();
-        });
-    }
-
 }

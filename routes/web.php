@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Post;
+use App\Models\Category;
+use App\Models\User;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
@@ -17,17 +19,26 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
  */
 
 Route::get('/', function () {
-    
     return view('posts',[
-        'posts' => Post::all()
+        'posts' => Post::latest()->with('category','author')->get()
     ]);
-
 });
 
-Route::get('post/{postName}', function ($slug) {
-
+Route::get('post/{post:slug}', function (Post $post) {
     return view('post', [
-        'post' => Post::findOrFail($slug)
+        'post' => $post
     ]);
+});/*->where('post', '[A-z_\-1-9]+');*/
 
-})->where('postName', '[A-z_\-]+');
+//Retrieves all posts associated with a category
+Route::get('categories/{category:slug}', function (Category $category) {
+    return view('posts', [
+        'posts' => $category->posts
+    ]);
+});
+
+Route::get('authors/{author:username}', function (User $author) {
+    return view('posts', [
+        'posts' => $author->posts
+    ]);
+});
