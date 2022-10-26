@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\User;
@@ -18,27 +19,24 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
  |
  */
 
-Route::get('/', function () {
-    return view('posts',[
-        'posts' => Post::latest()->with('category','author')->get()
-    ]);
-});
+Route::get('/',[PostController::class,'index'])->name('home');
 
-Route::get('post/{post:slug}', function (Post $post) {
-    return view('post', [
-        'post' => $post
-    ]);
-});/*->where('post', '[A-z_\-1-9]+');*/
+Route::get('post/{post:slug}', [PostController::class,'show'])->name('post');
+/*->where('post', '[A-z_\-1-9]+');*/
 
 //Retrieves all posts associated with a category
-Route::get('categories/{category:slug}', function (Category $category) {
-    return view('posts', [
-        'posts' => $category->posts
-    ]);
-});
+// Route::get('categories/{category:slug}', function (Category $category) {
+//     ddd('hi');
+//     return view('posts', [
+//         'posts' => $category->posts,
+//         'currentCategory' => $category,
+//         'categories' => Category::all()
+//     ]);
+// })->name('category');
 
 Route::get('authors/{author:username}', function (User $author) {
     return view('posts', [
-        'posts' => $author->posts
+        'posts' => $author->posts,
+        'categories' => Category::all()
     ]);
-});
+})->name('authors');
