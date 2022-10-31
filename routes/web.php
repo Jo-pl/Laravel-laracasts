@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostCommentsController;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Category;
@@ -24,6 +25,7 @@ use App\Http\Controllers\RegisterController;
 Route::get('/',[PostController::class,'index'])->name('home');
 
 Route::get('post/{post:slug}', [PostController::class,'show'])->name('post');
+Route::post('posts/{post:slug}/comments', [PostCommentsController::class,'store'])->name('create_comment');
 /*->where('post', '[A-z_\-1-9]+');*/
 
 //Retrieves all posts associated with a category
