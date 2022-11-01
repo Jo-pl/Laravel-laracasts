@@ -6,9 +6,9 @@
                 <form method="POST" action="/sessions" class="mt-10">
                 @csrf            
                 <!-- Email -->
-                <x-forms.input name='email' type='email' />
+                <x-forms.input name='email' type='email' required />
                 <!--Password -->
-                <x-forms.input name='password' type='password' />
+                <x-forms.input name='password' type='password' required />
                 <!--Button -->
                 <x-forms.button>Log in</x-forms.button>
                 </form>

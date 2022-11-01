@@ -4,9 +4,12 @@
         {{$heading}}
     </h1>
     <div class="flex">
-        <aside class="w-48">
-            <h4 class="font-semibold mb-6">Links</h4>
+        <aside class=" flex-shrink-0 w-48">
+            <h4 class="font-semibold mb-4 underline">Links</h4>
             <ul>
+                <li>
+                    <a href="/admin/posts" class={{request()->is('admin/posts')?'text-blue-500':''}}>All posts</a>
+                </li>
                 <li>
                     <a href="/admin/posts/create" class={{request()->is('admin/posts/create')?'text-blue-500':''}}>New post</a>
                 </li>
