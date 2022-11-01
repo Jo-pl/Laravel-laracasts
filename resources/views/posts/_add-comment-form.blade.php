@@ -19,7 +19,7 @@
                         </div>
     
                         <div class="flex justify-end mt-6 pt-6 border-t border-gray-200">
-                            <x-button-submit>Post</x-button-submit>
+                            <x-forms.button>Post</x-forms.button>
                         </div>
                     </form>
                     </x-panel>                      

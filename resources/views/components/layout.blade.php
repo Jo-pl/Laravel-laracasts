@@ -20,15 +20,21 @@
                 <a href="/register" class="text-xs font-bold uppercase">Register</a>    
                 <a href="/login" class="text-xs font-bold uppercase ml-10 mr-10">Login</a>   
                 @else
-                <span class="text-xs font-bold uppercase">Welcome , {{Auth::user()->name}}</span>
-                <form class="inline text-blue-500 ml-6" method="POST" action="/logout">
-                @csrf
-                <button type="submit">Log out</button>
-                @csrf
-                </form>
+                <span class="font-bold uppercase">
+                    <x-dropdown>
+                        <x-slot name="trigger">
+                            <button>Welcome , {{Auth::user()->name}}</button>
+                        </x-slot>
+                        <x-dropdown-item href="admin/posts/create" :active="request()->is('admin/posts/create')">New post</x-dropdown-item>
+                        <x-dropdown-item href="#" x-data="{}" @click.prevent="document.querySelector('#logout-form').submit()">Logout</x-dropdown-item>
+                    </x-dropdown>
+                    <form id="logout-form" class="inline text-blue-500 ml-6 hidden" method="POST" action="/logout">
+                        @csrf
+                        <!--<button type="submit">Log out</button>-->
+                    </form>                    
+                </span>
+                
                 @endguest
-
-
                 <a href="#" class="bg-blue-500 ml-3 rounded-full text-xs font-semibold text-white uppercase py-3 px-5">
                     Subscribe for Updates
                 </a>
